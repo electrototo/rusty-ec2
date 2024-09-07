@@ -64,26 +64,6 @@ async fn main() -> Result<(), Error>{
 
     terminal.show_cursor().unwrap();
 
-    // response.unwrap()
-    //     .reservations()
-    //     .iter()
-    //     .for_each(|reservation| -> () {
-    //         let instances = reservation.instances();
-
-    //         instances
-    //             .iter()
-    //             .for_each(|instance| -> () {
-    //                 let tags = instance.tags();
-
-    //                 println!("Instance ID: {}", instance.instance_id().unwrap());
-    //                 println!("Tags:");
-    //                 tags.iter().for_each(|tag| -> () {
-    //                     println!("\t{}: {}", tag.key().unwrap(), tag.value().unwrap());
-    //                 });
-    //             });
-    //             println!("");
-    //     });
-
     Ok(())
 }
 
@@ -96,13 +76,14 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                 continue;
             }
 
+            // Remove the previously selected instance bg color
+            app.reservations.get_mut(app.selected_instance).unwrap().selected = false;
+
             match key.code {
-                KeyCode::Char('w') => {
-                    app.reservations.get_mut(app.selected_instance).unwrap().selected = false;
+                KeyCode::Char('k') => {
                     app.selected_instance = app.selected_instance.saturating_sub(1);
                 },
-                KeyCode::Char('s') => {
-                    app.reservations.get_mut(app.selected_instance).unwrap().selected = false;
+                KeyCode::Char('j') => {
                     if app.selected_instance + 1 < app.reservations.len() {
                         app.selected_instance = app.selected_instance.saturating_add(1)
                     }
@@ -111,6 +92,7 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                 _ => {}
             }
 
+            // Color the selected row, that includes information related to the EC2 instance
             app.reservations.get_mut(app.selected_instance).unwrap().selected = true;
         }
 
