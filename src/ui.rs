@@ -98,9 +98,6 @@ pub fn ui(frame: &mut Frame, app: &App) {
         .padding(Padding::new(1, 0, 0, 0));
 
     let mut tags_display: Vec<Line> = Vec::new();
-    // tags_display.append(
-    //     &mut Line::styled("Tags", Style::default().add_modifier(Modifier::BOLD))
-    // );
 
     tags_display.append(&mut tags);
 
@@ -116,11 +113,6 @@ pub fn ui(frame: &mut Frame, app: &App) {
         Text::styled("Tags", Style::default().add_modifier(Modifier::BOLD)),
         Text::from(tags_display)
     ]).block(instance_details_block);
-
-    // let instance_details = Paragraph::new(Text::from(vec![
-    //     Line::styled("Tags", Style::default().add_modifier(Modifier::BOLD)),
-    //     Line::styled(tags.join("\n"), Style::default()),
-    // ]));
 
     frame.render_widget(instance_details, main_area[1]);
 }
